@@ -1,5 +1,13 @@
+import { useEffect } from "react";
 import { Col, Row, Table } from "react-bootstrap";
-function TaskContainer({ list }) {
+import { useDispatch, useSelector } from "react-redux";
+import { getTaskList } from "../redux/taskAction";
+function TaskContainer() {
+  const dispatch = useDispatch();
+  const { taskList } = useSelector((state) => state.tasks);
+  useEffect(() => {
+    dispatch(getTaskList());
+  }, [dispatch]);
   return (
     <Row className="mt-5">
       <Col>
@@ -7,7 +15,7 @@ function TaskContainer({ list }) {
         <hr />
         <Table striped bordered hover className="bg-transparent">
           <tbody>
-            {list.map((item, i) => {
+            {taskList.map((item, i) => {
               return (
                 <tr>
                   <td>{i + 1}</td>
