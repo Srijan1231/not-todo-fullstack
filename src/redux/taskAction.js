@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { fetchTask } from "../Helper/axiosHelper";
+import { deleteTasks, fetchTask, switchTask } from "../Helper/axiosHelper";
 import { setTaskList } from "./taskSlice";
 import { postTask } from "../Helper/axiosHelper";
 export const getTaskList = () => async (dispatch) => {
@@ -24,5 +24,28 @@ export const addTaskList = (taskObj) => async (dispatch) => {
     }
   } catch (error) {
     toast.error(error.message);
+  }
+};
+
+export const updateTask = (taskObj) => async (dispatch) => {
+  const dataPending = switchTask(taskObj);
+  toast.promise(dataPending, {
+    pending: "Please wait .... ",
+  });
+  const { status, message } = await dataPending;
+  toast[status](message);
+  if (status === "success") {
+    dispatch(getTaskList());
+  }
+};
+export const deleteTaskAction = (ids) => async (dispatch) => {
+  const pendingResp = deleteTasks(ids);
+  toast.promise(pendingResp, {
+    pending: "Please wait .... ",
+  });
+  const { status, message } = await pendingResp;
+  toast[status](message);
+  if (status === "success") {
+    dispatch(getTaskList());
   }
 };
