@@ -1,5 +1,8 @@
 import axios from "axios";
-const api = "http://localhost:8000/api/v1/task";
+const api =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost:8000api/v1/task"
+    : "/api/v1/task";
 export const postTask = async (taskObj) => {
   try {
     const { data } = await axios.post(api, taskObj);
@@ -31,5 +34,9 @@ export const deleteTasks = async (ids) => {
     return data;
   } catch (error) {
     console.log(error);
+    return {
+      status: "error",
+      message: error.message,
+    };
   }
 };
